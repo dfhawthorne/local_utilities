@@ -316,7 +316,7 @@ for block in blocks:
                             cmd_tag.insert(pos, cmd[:cmd_idx])
                             cmd_tag.insert(pos+1, url)
                             pos               += 2
-                            cmd                = cmd[cmd_idx+len(word)-1:]
+                            cmd                = cmd[cmd_idx+len(word):]
                     cmd_tag.insert(pos, cmd)
                     skip_output    = False
                     pos           += 1
