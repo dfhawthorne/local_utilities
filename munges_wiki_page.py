@@ -227,6 +227,8 @@ skip_output  = False
 for block in blocks:
     if block.get('style') != None:
         continue
+    if block.string == None:
+        continue
     lines = block.string.split('\n')
     in_sql_mode  = False
     output       = []
