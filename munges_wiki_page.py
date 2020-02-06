@@ -1,6 +1,27 @@
 #!/usr/bin/python3
 # ------------------------------------------------------------------------------
 # Munges a basic Wiki page
+#
+# A basic html page is created from the raw terminal log.
+#
+# Assumes that the content to be converted is delimited by <pre> and </pre>.
+# Each block is converted separately and then removed.
+#
+# Blocks can be decorated with the following tags:
+# #p for a paragraph to be inserted verbatim.
+# #h3 for a heading of level 3
+# #h4 for a heading of level 4
+#
+# Lines starting with a word that ends with a '$' is treated as a bash command
+# unless it is one of the above decorations.
+#
+# Lines starting with 'SQL>' are treated as SQL commands unless it is a
+# decoration.
+#
+# Other lines are treated as blocks of output from a preceding command.
+#
+# SQL commands such as 'DESC' and '!oerr' are ignored, and their output is
+# suppressed.
 # ------------------------------------------------------------------------------
 
 from bs4 import BeautifulSoup
@@ -9,6 +30,7 @@ import html
 
 # ------------------------------------------------------------------------------
 # Documentation links
+# These links are all for 12.1
 # ------------------------------------------------------------------------------
 
 doc_init_parms    = {
@@ -152,6 +174,12 @@ with open(file_name, "r") as f:
 soup = BeautifulSoup(html_doc, 'html.parser')
 
 # ------------------------------------------------------------------------------
+# If there are no pre-formatted blocks, terminate
+# ------------------------------------------------------------------------------
+
+if soup.pre == None: exit()
+
+# ------------------------------------------------------------------------------
 # Ensure that we have all of the correct headings
 # ------------------------------------------------------------------------------
 
@@ -177,6 +205,7 @@ if 'Procedure' not in headings:
 
 # ------------------------------------------------------------------------------
 # Get all pre-formatted blocks
+# Only convert those without style attributes.
 # ------------------------------------------------------------------------------
 
 basic_style = "background-color:%s;border:5px groove black;margin-left:10px;padding:2px"
@@ -193,6 +222,7 @@ sql_plus_urls = dict()
 unix_cmd_urls = dict()
 
 blocks       = soup.find_all('pre')
+
 skip_output  = False
 for block in blocks:
     if block.get('style') != None:
@@ -203,6 +233,9 @@ for block in blocks:
     has_h3_hdr   = False
     for raw_line in lines:
         line = html.unescape(raw_line)
+        # ----------------------------------------------------------------------
+        # Assumes PS1='[\u@\h \W]\$ ' or similar denotes a BASH command
+        # ----------------------------------------------------------------------
         if line.startswith('['):
             cmd_response(soup, block, output, text_style, error_urls)
             idx          = line.index(']')
@@ -249,6 +282,9 @@ for block in blocks:
                     cmd_tag.insert(1, cmd[cmd_pos:])
                 block.insert_before(cmd_tag)
             output       = []
+        # ----------------------------------------------------------------------
+        # Assumes sqlprompt="SQL> ". This denotes a SQL command
+        # ----------------------------------------------------------------------
         elif line.startswith('SQL>'):
             if not skip_output:
                 cmd_response(soup, block, output, text_style, error_urls)
@@ -321,6 +357,7 @@ for block in blocks:
                 if not skip_output:
                     block.insert_before(hdr_tag)
                     block.insert_before(tag)
+                    block.insert_before(cmd_tag)
             output       = []
         else:
             output.append(line)
