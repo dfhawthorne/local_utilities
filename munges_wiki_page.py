@@ -37,7 +37,8 @@ doc_init_parms    = {
 }
 doc_dynamic_views = {
     "V$PDBS":        "https://docs.oracle.com/database/121/REFRN/GUID-A399F608-36C8-4DF0-9A13-CEE25637653E.htm#REFRN30652",
-    "V$CONTAINERS":  "https://docs.oracle.com/database/121/REFRN/GUID-8865FE4F-C22F-4B04-BC21-A28FFFC92072.htm#REFRN30708"
+    "V$CONTAINERS":  "https://docs.oracle.com/database/121/REFRN/GUID-8865FE4F-C22F-4B04-BC21-A28FFFC92072.htm#REFRN30708",
+    "V$PARAMETER":   "https://docs.oracle.com/database/121/REFRN/GUID-C86F3AB0-1191-447F-8EDF-4727D8693754.htm#REFRN30176"
 }
 doc_static_views  = {
     "DBA_PDBS": "https://docs.oracle.com/database/121/REFRN/GUID-439126EA-A6B6-45B8-AAFA-37EE4356BBEF.htm"
@@ -52,6 +53,7 @@ doc_oracle_errors = {
 doc_sql_cmds     = {
     "ALTER PLUGGABLE DATABASE":  "https://docs.oracle.com/database/121/SQLRF/statements_2008.htm#SQLRF55667",
     "ALTER SESSION":             "https://docs.oracle.com/database/121/SQLRF/statements_2015.htm#SQLRF00901",
+    "ALTER SYSTEM":              "https://docs.oracle.com/database/121/SQLRF/statements_2017.htm#SQLRF00902",
     "CREATE PLUGGABLE DATABASE": "https://docs.oracle.com/database/121/SQLRF/statements_6010.htm#SQLRF55686",
     "CREATE DATABASE":           "https://docs.oracle.com/database/121/SQLRF/statements_5005.htm#SQLRF01204",
     "DROP PLUGGABLE DATABASE":   "https://docs.oracle.com/database/121/SQLRF/statements_8028.htm#SQLRF55699"
@@ -145,13 +147,15 @@ def add_doc_section(soup, title, url, doc_dict, style=None):
     """
     Adds a section containing references
     """
+    div_tag      = soup.new_tag('div')
     doc_tag      = soup.new_tag('li')
     a_tag        = soup.new_tag('a', href=url)
     a_tag.string = title
     doc_tag.insert(0, a_tag)
     doc_list     = add_doc_links(soup, doc_dict, style)
-    doc_tag.insert(1, doc_list)
-    return doc_tag
+    div_tag.insert(0, doc_tag)
+    div_tag.insert(1, doc_list)
+    return div_tag
 
 def add_doc_manual(soup, title, url):
     """
@@ -234,7 +238,7 @@ for block in blocks:
     output       = []
     has_h3_hdr   = False
     for raw_line in lines:
-        line = html.unescape(raw_line)
+        line = html.unescape(raw_line).expandtabs()
         # ----------------------------------------------------------------------
         # Assumes PS1='[\u@\h \W]\$ ' or similar denotes a BASH command
         # ----------------------------------------------------------------------
@@ -378,30 +382,34 @@ ref_list_pos = 0
 mono_style   = "font-family: monospace; font-size: large;"
 
 if len(error_urls) > 0:
+    ref_div_tag   = soup.new_tag('div')
     ref_doc_tag   = add_doc_manual(
         soup,
         'Oracle® 12.1 Database Error Messages',
         "https://docs.oracle.com/database/121/ERRMG/toc.htm"
     )
-    ref_list_tag.insert(ref_list_pos, ref_doc_tag)
+    ref_list_tag.insert(ref_list_pos, ref_div_tag)
     ref_list_pos += 1
     ref_doc_list  = add_doc_links(
         soup,
         error_urls,
         style=mono_style
     )
-    ref_doc_tag.insert(1, ref_doc_list)
+    ref_div_tag.insert(0, ref_doc_tag)
+    ref_div_tag.insert(1, ref_doc_list)
 
 if len(static_urls) + len(dynamic_urls) + len(init_urls) > 0:
+    ref_div_tag   = soup.new_tag('div')
     ref_doc_tag   = add_doc_manual(
         soup,
         'Oracle® 12.1 Database Reference',
         "https://docs.oracle.com/database/121/REFRN/toc.htm"
     )
-    ref_list_tag.insert(ref_list_pos, ref_doc_tag)
+    ref_list_tag.insert(ref_list_pos, ref_div_tag)
     ref_list_pos += 1
     ref_doc_list  = soup.new_tag('ul')
-    ref_doc_tag.insert(1, ref_doc_list)
+    ref_div_tag.insert(0, ref_doc_tag)
+    ref_div_tag.insert(1, ref_doc_list)
     doc_pos       = 0
 
     if len(init_urls) > 0:
@@ -438,19 +446,21 @@ if len(static_urls) + len(dynamic_urls) + len(init_urls) > 0:
         doc_pos += 1
 
 if len(sql_cmd_urls) > 0:
+    ref_div_tag   = soup.new_tag('div')
     ref_doc_tag   = add_doc_manual(
         soup,
         "Oracle® 12.1 SQL Language Reference",
         "https://docs.oracle.com/database/121/SQLRF/toc.htm"
     )
-    ref_list_tag.insert(ref_list_pos, ref_doc_tag)
+    ref_list_tag.insert(ref_list_pos, ref_div_tag)
     ref_list_pos += 1
     ref_doc_list  = add_doc_links(
         soup,
         sql_cmd_urls,
         style=mono_style
     )
-    ref_doc_tag.insert(1, ref_doc_list)
+    ref_div_tag.insert(0, ref_doc_tag)
+    ref_div_tag.insert(1, ref_doc_list)
 
     
 if len(sql_plus_urls) > 0:
