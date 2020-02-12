@@ -34,11 +34,13 @@ import html
 # ------------------------------------------------------------------------------
 
 doc_init_parms    = {
+    "DDL_LOCK_TIMEOUT":           "https://docs.oracle.com/database/121/REFRN/GUID-72D43EF8-F7AF-4011-8D64-73ABC4FB2154.htm#REFRN10267"
 }
 doc_dynamic_views = {
     "V$PDBS":        "https://docs.oracle.com/database/121/REFRN/GUID-A399F608-36C8-4DF0-9A13-CEE25637653E.htm#REFRN30652",
     "V$CONTAINERS":  "https://docs.oracle.com/database/121/REFRN/GUID-8865FE4F-C22F-4B04-BC21-A28FFFC92072.htm#REFRN30708",
-    "V$PARAMETER":   "https://docs.oracle.com/database/121/REFRN/GUID-C86F3AB0-1191-447F-8EDF-4727D8693754.htm#REFRN30176"
+    "V$PARAMETER":   "https://docs.oracle.com/database/121/REFRN/GUID-C86F3AB0-1191-447F-8EDF-4727D8693754.htm#REFRN30176",
+    "V$TABLESPACE":  "https://docs.oracle.com/database/121/REFRN/GUID-E6BF227D-CFAA-43EB-A7C9-F0AF293FDEC0.htm"
 }
 doc_static_views  = {
     "DBA_PDBS": "https://docs.oracle.com/database/121/REFRN/GUID-439126EA-A6B6-45B8-AAFA-37EE4356BBEF.htm"
@@ -59,6 +61,10 @@ doc_sql_cmds     = {
     "DROP PLUGGABLE DATABASE":   "https://docs.oracle.com/database/121/SQLRF/statements_8028.htm#SQLRF55699"
 }
 doc_sql_plus_cmds = {
+    "COLUMN":                    "https://docs.oracle.com/database/121/SQPUG/ch_twelve013.htm#i2697128",
+    "SET LINESIZE":              "https://docs.oracle.com/database/121/SQPUG/ch_twelve040.htm#i2678481",
+    "SET PAGESIZE":              "https://docs.oracle.com/database/121/SQPUG/ch_twelve040.htm#i2699247",
+    "SHOW":                      "https://docs.oracle.com/database/121/SQPUG/ch_twelve041.htm#SQPUG124",
     "SHUTDOWN":                  "https://docs.oracle.com/database/121/SQPUG/ch_twelve042.htm#SQPUG125",
     "STARTUP":                   "https://docs.oracle.com/database/121/SQPUG/ch_twelve045.htm#SQPUG128",
     "sqlplus":                   "https://docs.oracle.com/database/121/SQPUG/ch_three.htm#SQPUG363"
