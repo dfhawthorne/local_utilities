@@ -282,8 +282,12 @@ for block in blocks:
                 block.insert_before(tag)
                 cmd_tag      = soup.new_tag('pre', style=cmd_style)
                 first_word   = cmd.split()[0]
-                url_part     = doc_unix_cmds.get(first_word)
-                unix_cmd_urls[first_word] = url_part
+                if first_word == 'sqlplus':
+                    url_part     = doc_sql_plus_cmds.get(first_word)
+                    sql_plus_urls[first_word] = url_part
+                else:
+                    url_part     = doc_unix_cmds.get(first_word)
+                    unix_cmd_urls[first_word] = url_part
                 cmd_pos      = cmd.index(first_word) + len(first_word)
                 if url_part == None:
                     cmd_tag.string = cmd
@@ -338,6 +342,7 @@ for block in blocks:
                     skip_output    = True
                 else:
                     words          = cmd.split()
+                    one_word       = words[0].upper()
                     two_words      = ' '.join(words[:2]).upper()
                     three_words    = ' '.join(words[:3]).upper()
                     url_part       = doc_sql_cmds.get(three_words)
@@ -347,12 +352,20 @@ for block in blocks:
                             cmd_pos        = cmd.index(words[1]) + len(words[1])
                             sql_cmd_urls[two_words] = url_part
                         else:
-                            url_part       = doc_sql_plus_cmds.get(words[0].upper())
-                            if url_part != None:
-                                sql_plus_urls[words[0].upper()] = url_part
-                                cmd_pos                         = len(words[0])
+                            url_part_2      = doc_sql_plus_cmds.get(two_words)
+                            url_part_1      = doc_sql_plus_cmds.get(one_word)
+                            if url_part_2 != None:
+                                sql_plus_urls[two_words] = url_part_2
+                                cmd_pos                  = cmd.index(words[1]) + len(words[1])
+                                url_part                 = url_part_2
+                            elif url_part_1 != None:
+                                sql_plus_urls[one_word]  = url_part_1
+                                cmd_pos                  = len(words[0])
+                                url_part                 = url_part_1
                             else:
-                                sql_cmd_urls[two_words]         = None
+                                sql_cmd_urls[one_word]   = None
+                                cmd_pos                  = 0
+                                url_part                 = None
                     else:
                         cmd_pos        = cmd.index(words[2]) + len(words[2])
                         sql_cmd_urls[three_words] = url_part
