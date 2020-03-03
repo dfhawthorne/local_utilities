@@ -56,12 +56,18 @@ doc_sql_cmds     = {
     "ALTER PLUGGABLE DATABASE":  "https://docs.oracle.com/database/121/SQLRF/statements_2008.htm#SQLRF55667",
     "ALTER SESSION":             "https://docs.oracle.com/database/121/SQLRF/statements_2015.htm#SQLRF00901",
     "ALTER SYSTEM":              "https://docs.oracle.com/database/121/SQLRF/statements_2017.htm#SQLRF00902",
+    "ALTER USER":                "https://docs.oracle.com/database/121/SQLRF/statements_4003.htm#SQLRF01103",
+    "CREATE AUDIT POLICY":       "https://docs.oracle.com/database/121/SQLRF/statements_5001.htm#SQLRF56055",
     "CREATE PLUGGABLE DATABASE": "https://docs.oracle.com/database/121/SQLRF/statements_6010.htm#SQLRF55686",
     "CREATE DATABASE":           "https://docs.oracle.com/database/121/SQLRF/statements_5005.htm#SQLRF01204",
-    "DROP PLUGGABLE DATABASE":   "https://docs.oracle.com/database/121/SQLRF/statements_8028.htm#SQLRF55699"
+    "CREATE TABLE":              "https://docs.oracle.com/database/121/SQLRF/statements_7002.htm#SQLRF01402",
+    "CREATE USER":               "https://docs.oracle.com/database/121/SQLRF/statements_8003.htm#SQLRF01503",
+    "DROP PLUGGABLE DATABASE":   "https://docs.oracle.com/database/121/SQLRF/statements_8028.htm#SQLRF55699",
+    "GRANT":                     "https://docs.oracle.com/database/121/SQLRF/statements_9014.htm#SQLRF01603"
 }
 doc_sql_plus_cmds = {
     "COLUMN":                    "https://docs.oracle.com/database/121/SQPUG/ch_twelve013.htm#i2697128",
+    "CONNECT":                   "https://docs.oracle.com/database/121/SQPUG/ch_twelve015.htm#SQPUG036",
     "SET LINESIZE":              "https://docs.oracle.com/database/121/SQPUG/ch_twelve040.htm#i2678481",
     "SET PAGESIZE":              "https://docs.oracle.com/database/121/SQPUG/ch_twelve040.htm#i2699247",
     "SHOW":                      "https://docs.oracle.com/database/121/SQPUG/ch_twelve041.htm#SQPUG124",
@@ -348,9 +354,14 @@ for block in blocks:
                     url_part       = doc_sql_cmds.get(three_words)
                     if url_part == None:
                         url_part       = doc_sql_cmds.get(two_words)
+                        url_part_1     = doc_sql_cmds.get(one_word)
                         if url_part != None:
-                            cmd_pos        = cmd.index(words[1]) + len(words[1])
+                            cmd_pos                 = cmd.index(words[1]) + len(words[1])
                             sql_cmd_urls[two_words] = url_part
+                        elif url_part_1 != None:
+                            cmd_pos                 = cmd.index(words[0]) + len(words[0])
+                            sql_cmd_urls[one_word]  = url_part_1
+                            url_part                = url_part_1
                         else:
                             url_part_2      = doc_sql_plus_cmds.get(two_words)
                             url_part_1      = doc_sql_plus_cmds.get(one_word)
