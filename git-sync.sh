@@ -4,13 +4,19 @@
 # ones.
 # ----------------------------------------------------------------------
 
-pushd -n .
+pushd -n . >/dev/null
 
 for dir in $(find ~ -name ".git" -type d)
 do
     git_dir=$(dirname ${dir})
-    cd ${git_dir}
-    git pull
+    cd "${git_dir}"
+    if [ -z "$(git config --get-regexp 'remote.*.fetch')" ]
+    then
+        printf "No remote repository defined for %s\n" "${git_dir}"
+    else
+        printf "Pull from remote into %s\n" "${git_dir}"
+        git pull
+    fi
 done
 
-popd
+popd >/dev/null
