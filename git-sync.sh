@@ -6,9 +6,10 @@
 
 pushd -n . >/dev/null
 
-for dir in $(find ~ -name ".git" -type d)
+find ~ -name ".git" -type d | \
+while read dir
 do
-    git_dir=$(dirname ${dir})
+    git_dir=$(dirname "${dir}")
     cd "${git_dir}"
     if [ -z "$(git config --get-regexp 'remote.*.fetch')" ]
     then
