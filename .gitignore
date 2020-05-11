@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# HTML test results
+munges_wiki_page/actual_results/*
