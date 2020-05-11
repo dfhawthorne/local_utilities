@@ -1,0 +1,12 @@
+"VERSION","KEY","VALUE"
+"12.1","ALTER PLUGGABLE DATABASE","https://docs.oracle.com/database/121/SQLRF/statements_2008.htm#SQLRF55667",
+"12.1","ALTER SESSION","https://docs.oracle.com/database/121/SQLRF/statements_2015.htm#SQLRF00901",
+"12.1","ALTER SYSTEM","https://docs.oracle.com/database/121/SQLRF/statements_2017.htm#SQLRF00902",
+"12.1","ALTER USER","https://docs.oracle.com/database/121/SQLRF/statements_4003.htm#SQLRF01103",
+"12.1","CREATE AUDIT POLICY","https://docs.oracle.com/database/121/SQLRF/statements_5001.htm#SQLRF56055",
+"12.1","CREATE PLUGGABLE DATABASE","https://docs.oracle.com/database/121/SQLRF/statements_6010.htm#SQLRF55686",
+"12.1","CREATE DATABASE","https://docs.oracle.com/database/121/SQLRF/statements_5005.htm#SQLRF01204",
+"12.1","CREATE TABLE","https://docs.oracle.com/database/121/SQLRF/statements_7002.htm#SQLRF01402",
+"12.1","CREATE USER","https://docs.oracle.com/database/121/SQLRF/statements_8003.htm#SQLRF01503",
+"12.1","DROP PLUGGABLE DATABASE","https://docs.oracle.com/database/121/SQLRF/statements_8028.htm#SQLRF55699",
+"12.1","GRANT","https://docs.oracle.com/database/121/SQLRF/statements_9014.htm#SQLRF01603"

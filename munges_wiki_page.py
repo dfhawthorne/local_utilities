@@ -25,63 +25,12 @@
 # ------------------------------------------------------------------------------
 
 from bs4 import BeautifulSoup
+import csv
+import os
 import sys
 import html
 
-# ------------------------------------------------------------------------------
-# Documentation links
-# These links are all for 12.1
-# ------------------------------------------------------------------------------
-
-doc_init_parms    = {
-    "DDL_LOCK_TIMEOUT":           "https://docs.oracle.com/database/121/REFRN/GUID-72D43EF8-F7AF-4011-8D64-73ABC4FB2154.htm#REFRN10267"
-}
-doc_dynamic_views = {
-    "V$PDBS":        "https://docs.oracle.com/database/121/REFRN/GUID-A399F608-36C8-4DF0-9A13-CEE25637653E.htm#REFRN30652",
-    "V$CONTAINERS":  "https://docs.oracle.com/database/121/REFRN/GUID-8865FE4F-C22F-4B04-BC21-A28FFFC92072.htm#REFRN30708",
-    "V$PARAMETER":   "https://docs.oracle.com/database/121/REFRN/GUID-C86F3AB0-1191-447F-8EDF-4727D8693754.htm#REFRN30176",
-    "V$TABLESPACE":  "https://docs.oracle.com/database/121/REFRN/GUID-E6BF227D-CFAA-43EB-A7C9-F0AF293FDEC0.htm"
-}
-doc_static_views  = {
-    "DBA_PDBS": "https://docs.oracle.com/database/121/REFRN/GUID-439126EA-A6B6-45B8-AAFA-37EE4356BBEF.htm"
-}
-doc_oracle_errors = {
-    "ORA-00922": "https://docs.oracle.com/database/121/ERRMG/ORA-00910.htm#GUID-D9EBDFFA-88C6-4185-BD2C-E1B959A97274__GUID-E44B4421-18C7-4C15-BC74-F223E4AC6A6B",
-    "ORA-01100": "https://docs.oracle.com/database/121/ERRMG/ORA-00910.htm#GUID-D9EBDFFA-88C6-4185-BD2C-E1B959A97274__GUID-556B6E62-D6DD-445E-A46D-D3F607CD986F",
-    "ORA-01501": "https://docs.oracle.com/database/121/ERRMG/ORA-01500.htm#GUID-65B2B9E5-7075-4D53-91B8-FCAECA0AEE0E__GUID-D42F0E47-0C62-4ED5-BB85-7D0DDB3DADC6",
-    "ORA-65012": "https://docs.oracle.com/database/121/ERRMG/ORA-60001.htm#GUID-9B78A028-D760-4810-9CFC-9013FBD1FCC9__GUID-57176DA6-6098-4970-B614-B7729FF7D841",
-    "ORA-65025": "https://docs.oracle.com/database/121/ERRMG/ORA-60001.htm#GUID-9B78A028-D760-4810-9CFC-9013FBD1FCC9__GUID-0AA303A6-2499-47D7-8F11-AAD00A18B230"
-}
-doc_sql_cmds     = {
-    "ALTER PLUGGABLE DATABASE":  "https://docs.oracle.com/database/121/SQLRF/statements_2008.htm#SQLRF55667",
-    "ALTER SESSION":             "https://docs.oracle.com/database/121/SQLRF/statements_2015.htm#SQLRF00901",
-    "ALTER SYSTEM":              "https://docs.oracle.com/database/121/SQLRF/statements_2017.htm#SQLRF00902",
-    "ALTER USER":                "https://docs.oracle.com/database/121/SQLRF/statements_4003.htm#SQLRF01103",
-    "CREATE AUDIT POLICY":       "https://docs.oracle.com/database/121/SQLRF/statements_5001.htm#SQLRF56055",
-    "CREATE PLUGGABLE DATABASE": "https://docs.oracle.com/database/121/SQLRF/statements_6010.htm#SQLRF55686",
-    "CREATE DATABASE":           "https://docs.oracle.com/database/121/SQLRF/statements_5005.htm#SQLRF01204",
-    "CREATE TABLE":              "https://docs.oracle.com/database/121/SQLRF/statements_7002.htm#SQLRF01402",
-    "CREATE USER":               "https://docs.oracle.com/database/121/SQLRF/statements_8003.htm#SQLRF01503",
-    "DROP PLUGGABLE DATABASE":   "https://docs.oracle.com/database/121/SQLRF/statements_8028.htm#SQLRF55699",
-    "GRANT":                     "https://docs.oracle.com/database/121/SQLRF/statements_9014.htm#SQLRF01603"
-}
-doc_sql_plus_cmds = {
-    "COLUMN":                    "https://docs.oracle.com/database/121/SQPUG/ch_twelve013.htm#i2697128",
-    "CONNECT":                   "https://docs.oracle.com/database/121/SQPUG/ch_twelve015.htm#SQPUG036",
-    "SET LINESIZE":              "https://docs.oracle.com/database/121/SQPUG/ch_twelve040.htm#i2678481",
-    "SET PAGESIZE":              "https://docs.oracle.com/database/121/SQPUG/ch_twelve040.htm#i2699247",
-    "SHOW":                      "https://docs.oracle.com/database/121/SQPUG/ch_twelve041.htm#SQPUG124",
-    "SHUTDOWN":                  "https://docs.oracle.com/database/121/SQPUG/ch_twelve042.htm#SQPUG125",
-    "STARTUP":                   "https://docs.oracle.com/database/121/SQPUG/ch_twelve045.htm#SQPUG128",
-    "sqlplus":                   "https://docs.oracle.com/database/121/SQPUG/ch_three.htm#SQPUG363"
-}
-doc_unix_cmds     = {
-    "cd":                        "http://man7.org/linux/man-pages/man1/cd.1p.html",
-    "ethtool":                   "http://man7.org/linux/man-pages/man8/ethtool.8.html",
-    "grep":                      "http://man7.org/linux/man-pages/man1/grep.1.html",
-    "ip":                        "http://man7.org/linux/man-pages/man8/ip.8.html",
-    "uname":                     "http://man7.org/linux/man-pages/man1/uname.1.html"
-}
+from wiki_munger import wiki_munger
 
 # ------------------------------------------------------------------------------
 # Helper routines
@@ -187,6 +136,7 @@ file_name = sys.argv[1]
 with open(file_name, "r") as f:
     html_doc = f.read()
 
+munger = wiki_munger()
 soup = BeautifulSoup(html_doc, 'html.parser')
 
 # ------------------------------------------------------------------------------
@@ -289,10 +239,10 @@ for block in blocks:
                 cmd_tag      = soup.new_tag('pre', style=cmd_style)
                 first_word   = cmd.split()[0]
                 if first_word == 'sqlplus':
-                    url_part     = doc_sql_plus_cmds.get(first_word)
+                    url_part     = munger.doc_sql_plus_cmds.get(first_word)
                     sql_plus_urls[first_word] = url_part
                 else:
-                    url_part     = doc_unix_cmds.get(first_word)
+                    url_part     = munger.doc_unix_cmds.get(first_word)
                     unix_cmd_urls[first_word] = url_part
                 cmd_pos      = cmd.index(first_word) + len(first_word)
                 if url_part == None:
@@ -324,10 +274,10 @@ for block in blocks:
                     for word in words:
                         upper_word = word.upper().strip(';')
                         if upper_word.startswith('V$') or upper_word.startswith('GV$'):
-                            url_part                 = doc_dynamic_views.get(upper_word)
+                            url_part                 = munger.doc_dynamic_views.get(upper_word)
                             dynamic_urls[upper_word] = url_part
                         elif upper_word.startswith('DBA_') or upper_word.startswith('ALL_'):
-                            url_part                 = doc_static_views.get(upper_word)
+                            url_part                 = munger.doc_static_views.get(upper_word)
                             static_urls[upper_word]  = url_part
                         else:
                             url_part = None
@@ -351,10 +301,10 @@ for block in blocks:
                     one_word       = words[0].upper()
                     two_words      = ' '.join(words[:2]).upper()
                     three_words    = ' '.join(words[:3]).upper()
-                    url_part       = doc_sql_cmds.get(three_words)
+                    url_part       = munger.doc_sql_cmds.get(three_words)
                     if url_part == None:
-                        url_part       = doc_sql_cmds.get(two_words)
-                        url_part_1     = doc_sql_cmds.get(one_word)
+                        url_part       = munger.doc_sql_cmds.get(two_words)
+                        url_part_1     = munger.doc_sql_cmds.get(one_word)
                         if url_part != None:
                             cmd_pos                 = cmd.index(words[1]) + len(words[1])
                             sql_cmd_urls[two_words] = url_part
@@ -363,8 +313,8 @@ for block in blocks:
                             sql_cmd_urls[one_word]  = url_part_1
                             url_part                = url_part_1
                         else:
-                            url_part_2      = doc_sql_plus_cmds.get(two_words)
-                            url_part_1      = doc_sql_plus_cmds.get(one_word)
+                            url_part_2      = munger.doc_sql_plus_cmds.get(two_words)
+                            url_part_1      = munger.doc_sql_plus_cmds.get(one_word)
                             if url_part_2 != None:
                                 sql_plus_urls[two_words] = url_part_2
                                 cmd_pos                  = cmd.index(words[1]) + len(words[1])
