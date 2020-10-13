@@ -7,10 +7,10 @@
 pushd -n . >/dev/null
 
 find ~ -name ".git" -type d | \
-while read dir
+while read -r dir
 do
     git_dir=$(dirname "${dir}")
-    cd "${git_dir}"
+    cd "${git_dir}" || continue
     if [ -z "$(git config --get-regexp 'remote.*.fetch')" ]
     then
         printf "No remote repository defined for %s\n" "${git_dir}"
@@ -20,4 +20,4 @@ do
     fi
 done
 
-popd >/dev/null
+popd >/dev/null || exit
