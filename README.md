@@ -21,3 +21,21 @@ The target html will have three (3) main sections:
 ## git-sync.sh
 
 Does a `git pull` in all local GIT repositories that can be found from my home directory.
+
+## get_run_time_from_log_file
+
+Calculates the difference between the change and access times for a file. This assumes that the only access was done on file creation.
+
+Sample usage:
+```bash
+get_run_time_from_log_file logs/JAR_DG/JAR_DG_2020_10_30G.log
+```
+The sample output is:
+```
+  0d  0h 16m 47s
+```
+
+To create the executable, run:
+```bash
+make get_run_time_from_log_file
+```
