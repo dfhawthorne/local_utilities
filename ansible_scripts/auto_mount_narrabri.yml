@@ -1,0 +1,60 @@
+---
+# ------------------------------------------------------------------------------
+# Converts all NFS mounts from Narrabri NAS to AutoFS
+# ------------------------------------------------------------------------------
+
+- name:                 "Convert NFS to AutoFS"
+  hosts:                all
+  tasks:
+  
+  - name:               "Set variables"
+    set_facts:
+      software_dir:     "/opt/share/Software"
+      software_loc:     "192.168.1.253:/data/Software"
+      auto_direct:      "/etc/auto.direct"
+  
+  - name:               "Install AUTOFS software on Ubuntu"
+    apt:
+      name:             autofs
+      state:            latest
+    when:               ansible_distribution == "Ubuntu"
+    
+  - name:               "Install AUTOFS software on Oracle Linux"
+    yum:
+      name:             autofs
+      state:            latest
+    when:               ansible_distribution == "OracleLinux"
+    
+  - name:               "Create mount point"
+    file:
+      path:             "{{ software_dir }}"
+      state:            directory
+    
+  - name:               "Remove NFS mount point"
+    mount:
+      path:             "{{ software_dir }}"
+      state:            absent
+      
+  - name:               "Point to {{ auto_direct }}"
+    lineinfile:
+      path:             /etc/auto.master
+      regexp:           '^/-'
+      insertafter:      EOF
+      line:             "/-      {{ auto_direct }}"
+      state:            present
+      
+  - name:               "AutoFS mount points"
+    lineinfile:
+      path:             "{{ auto_direct }}"
+      regexp:           "^{{ software_dir }}"
+      insertafter:      EOF
+      line:             "{{ software_dir }}      {{ software_loc }}"
+      create:           TRUE
+      state:            present
+      
+  - name:               "Restart AutoFS service"
+    service:
+      name:             autofs
+      state:            restarted
+...
+
