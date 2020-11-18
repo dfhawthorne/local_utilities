@@ -73,5 +73,13 @@
     become:             yes
     become_user:        root
     when:               add_auto_direct.changed or add_mount_points.changed
+
+  - name:               "Enable AUTOFS service"
+    service:
+      name:             autofs
+      enabled:          yes
+      state:            started
+    become:             yes
+    become_user:        root
 ...
 
