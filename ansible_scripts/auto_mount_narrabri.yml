@@ -8,7 +8,7 @@
   tasks:
   
   - name:               "Set variables"
-    set_facts:
+    set_fact:
       software_dir:     "/opt/share/Software"
       software_loc:     "192.168.1.253:/data/Software"
       auto_direct:      "/etc/auto.direct"
@@ -18,22 +18,30 @@
       name:             autofs
       state:            latest
     when:               ansible_distribution == "Ubuntu"
+    become:             yes
+    become_user:        root
     
   - name:               "Install AUTOFS software on Oracle Linux"
     yum:
       name:             autofs
       state:            latest
     when:               ansible_distribution == "OracleLinux"
+    become:             yes
+    become_user:        root
     
   - name:               "Create mount point"
     file:
       path:             "{{ software_dir }}"
       state:            directory
+    become:             yes
+    become_user:        root
     
   - name:               "Remove NFS mount point"
     mount:
       path:             "{{ software_dir }}"
       state:            absent
+    become:             yes
+    become_user:        root
       
   - name:               "Point to {{ auto_direct }}"
     lineinfile:
@@ -42,6 +50,9 @@
       insertafter:      EOF
       line:             "/-      {{ auto_direct }}"
       state:            present
+    become:             yes
+    become_user:        root
+    register:           add_auto_direct
       
   - name:               "AutoFS mount points"
     lineinfile:
@@ -51,10 +62,24 @@
       line:             "{{ software_dir }}      {{ software_loc }}"
       create:           TRUE
       state:            present
+    become:             yes
+    become_user:        root
+    register:           add_mount_points
       
   - name:               "Restart AutoFS service"
     service:
       name:             autofs
       state:            restarted
+    become:             yes
+    become_user:        root
+    when:               add_auto_direct.changed or add_mount_points.changed
+
+  - name:               "Enable AUTOFS service"
+    service:
+      name:             autofs
+      enabled:          yes
+      state:            started
+    become:             yes
+    become_user:        root
 ...
 
