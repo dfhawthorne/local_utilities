@@ -12,7 +12,7 @@
 #   * [Link 2)(#link-2)
 # ------------------------------------------------------------------------------
 h                                   # Save original text
-s/[:']//g                           # remove special characters
+s/[:'.]//g                          # remove special characters
 s/ /-/g                             # convert all spaces to dashes
 s/\(.*\)/\L\1/                      # convert to lowercase
 G                                   # append original text
