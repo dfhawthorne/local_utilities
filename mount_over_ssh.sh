@@ -4,7 +4,7 @@
 # ------------------------------------------------------------------------------
 
 domain="yaocm.id.au"
-hosts="auburn personal dural hammer"
+hosts="auburn personal dural hammer allawah"
 
 for host in ${hosts}
 do  mount_point="${HOME}/mount/${host}"
