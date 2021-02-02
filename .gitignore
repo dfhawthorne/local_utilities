@@ -130,3 +130,4 @@ dmypy.json
 
 # Executables
 get_run_time_from_log_file
+*.swp
