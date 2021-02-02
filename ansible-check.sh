@@ -23,6 +23,8 @@ then
    "${yamllint}" "$1"                                       \
         || exit 1
     printf "YAML Lint successful\n"
+else
+    printf "yamllint is not installed\n" >&2
 fi
 
 if [ -n "${ansible_playbook}" ]
@@ -31,6 +33,8 @@ then
     "${ansible_playbook}" --syntax-check "$1"               \
          || exit 1
     printf "Syntax check successful\n"
+else
+    printf "ansible-playbook is not installed\n" >&2
 fi
 
 if [ -n "${ansible_lint}" ]
@@ -39,6 +43,8 @@ then
     "${ansible_lint}" "$1"                                  \
         || exit 1
     printf "Ansible lint successful\n"
+else
+    printf "ansible-lint is not installed\n" >&2
 fi
 
 if [ -n "${ansible_playbook}" ]
@@ -47,6 +53,8 @@ then
     "${ansible_playbook}" --ask-become-pass --check "$1"    \
          || exit 1
     printf "Check mode successful\n"
+else
+    printf "ansible-playbook is not installed\n" >&2
 fi
 
 printf "All done\n"
