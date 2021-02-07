@@ -9,3 +9,4 @@ repository. Earlier decisions have not been recorded.
 1. [2020-11-21](2020-11-21.md) SSHFS Enhancement
 1. [2020-11-27](2020-11-27.md) Ansible playbook checker
 1. [2020-12-31](2020-12-31.md) TOC from Markdown Enhancements
+1. [2021-02-07](2021-02-07.md) Removed hard-coded host names and domain name
