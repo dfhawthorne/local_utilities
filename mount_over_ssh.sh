@@ -39,9 +39,9 @@ do
     remote_host="${host}.${domain}"
     if [[ -n "${dig_cmd}" ]]
     then
-        ip_addr=$(dig +short "${remote_host}")
+        ip_addr=$(dig +short "${remote_host}"|cut -d\  -f1)
         [[ -z "${ip_addr}" && -n "${name_server}" ]] && \
-            ip_addr=$(dig @"${name_server}" +short "${remote_host}")
+            ip_addr=$(dig @"${name_server}" +short "${remote_host}"|cut -d\  -f1)
         if [[ -z "${ip_addr}" ]]
         then
             printf "Unable to resolve IP address for %s\n" "${remote_host}" >&2
