@@ -28,5 +28,5 @@ do
     else
         printf "Cannot rename %s to %s\n" "${log_name}" "${new_name}" >&2
     fi
-done < <(find ~ -maxdepth 3 -name logs -type d -print0)
+done < <(find ~ -maxdepth 4 -name logs -type d -print0)
 

@@ -13,4 +13,5 @@ repository. Earlier decisions have not been recorded.
 * [2021-02-13](2021-02-13.md) Added optional name server to `mount_over_ssh.sh`
 * [2023-10-27](2023-10-27.md) Create TOC for README.md
 * [2023-11-22](2023_11_22.md) Show Status of All Local GIT Repositories
-* [2023-11-23](2023_11_23.md) Update to mount_over_ssh.sh for Identity DIG Option
+* [2023-11-23](2023_11_23.md) Update to mount\_over\_ssh.sh for Identity DIG Option
+* [2024-01-19](2024_01_19.md) Increased Depth for Ansible Logs
