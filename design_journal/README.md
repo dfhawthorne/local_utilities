@@ -14,3 +14,4 @@ repository. Earlier decisions have not been recorded.
 * [2023-10-27](2023-10-27.md) Create TOC for README.md
 * [2023-11-22](2023_11_22.md) Show Status of All Local GIT Repositories
 * [2023-11-23](2023_11_23.md) Update to mount_over_ssh.sh for Identity DIG Option
+* [2024-01-30](2024_01_30.md) Counting Lines of Code (LOC) in GIT Repositories
