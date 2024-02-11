@@ -57,7 +57,7 @@ d                                   # Delete current line, start next cycle
 # ------------------------------------------------------------------------------
 :toc                                # Have a TOC entry
 h                                   # Save original text
-s/[:'.\/()]//g                      # remove special characters
+s/[:'.\/()=]//g                     # remove special characters
 s/ /-/g                             # convert all spaces to dashes
 s/(.*)/\L\1/                        # convert to lowercase
 G                                   # append original text
